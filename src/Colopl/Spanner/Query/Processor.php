@@ -66,4 +66,14 @@ class Processor extends \Illuminate\Database\Query\Processors\Processor
             return ((object) $result)->index_name;
         }, $results);
     }
+
+//    public function processInsertGetId(Builder $query, $sql, $values, $sequence = null)
+//    {
+//        dd($values);
+//        $query->getConnection()->insert($sql, $values);
+//
+//        $id = $query->getConnection()->getPdo()->lastInsertId($sequence);
+//
+//        return is_numeric($id) ? (int) $id : $id;
+//    }
 }

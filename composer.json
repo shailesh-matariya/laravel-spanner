@@ -1,5 +1,5 @@
 {
-  "name": "colopl/laravel-spanner",
+  "name": "shailesh-matariya/laravel-spanner",
   "description": "Laravel database driver for Google Cloud Spanner",
   "type": "library",
   "license": "Apache-2.0",

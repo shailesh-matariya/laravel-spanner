@@ -8,10 +8,10 @@
     {"name": "Takayasu Oyama", "email": "t-oyama@colopl.co.jp"}
   ],
   "require": {
-    "php": ">=7.1",
+    "php": "^7.2.5",
     "ext-grpc": "*",
     "ext-json": "*",
-    "laravel/framework": "~5.5|~6.0|~7.0",
+    "laravel/framework": "~7.0",
     "google/cloud-spanner": "^1.30",
     "grpc/grpc": "^1.15.0",
     "ramsey/uuid": "~3|~4",

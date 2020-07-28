@@ -17,6 +17,8 @@
 
 namespace Colopl\Spanner;
 
+use Colopl\Spanner\Console\MakeMigrationCommand;
+use Colopl\Spanner\Migrations\SpannerMigrationCreator;
 use Exception;
 use Colopl\Spanner\Console\InstallCommand;
 use Colopl\Spanner\Console\MigrateCommand;
@@ -27,7 +29,6 @@ use Colopl\Spanner\Migrations\Migrator;
 use Google\Cloud\Spanner\Session\CacheSessionPool;
 use Google\Cloud\Spanner\Session\SessionPoolInterface;
 use Illuminate\Database\DatabaseManager;
-use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -124,6 +125,10 @@ class SpannerServiceProvider extends ServiceProvider
             $repository = $app['spanner.migration.repository'];
             return new Migrator($repository, $app['db'], $app['files']);
         });
+
+        $this->app->singleton('spanner.migrator.creator', function ($app) {
+            return new SpannerMigrationCreator($app['files'], $app->basePath('stubs'));
+        });
     }
 
     /**
@@ -134,10 +139,12 @@ class SpannerServiceProvider extends ServiceProvider
     protected function registerCommands()
     {
         $this->registerMigrateCommand();
+        $this->registerMakeMigrationCommand();
         $this->registerMigrateInstallCommand();
         $this->registerMigrateResetCommand();
         $this->registerMigrateRollbackCommand();
         $this->commands([
+            'spanner.command.make.migration',
             'spanner.command.migrate',
             'spanner.command.migrate.install',
             'spanner.command.migrate.reset',
@@ -154,6 +161,18 @@ class SpannerServiceProvider extends ServiceProvider
     {
         $this->app->singleton('spanner.command.migrate', function ($app) {
             return new MigrateCommand($app['spanner.migrator']);
+        });
+    }
+
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerMakeMigrationCommand()
+    {
+        $this->app->singleton('spanner.command.make.migration', function ($app) {
+            return new MakeMigrationCommand($app['spanner.migrator.creator'], $app['composer']);
         });
     }
 
@@ -204,6 +223,7 @@ class SpannerServiceProvider extends ServiceProvider
             'db.spanner',
             'spanner.migrator',
             'spanner.migration.repository',
+            'spanner.command.make.migration',
             'spanner.command.migrate',
             'spanner.command.migrate.install',
             'spanner.command.migrate.reset',

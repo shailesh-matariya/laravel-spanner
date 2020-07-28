@@ -309,6 +309,17 @@ class Grammar extends \Illuminate\Database\Schema\Grammars\Grammar
     }
 
     /**
+     * Create the column definition for a text type.
+     *
+     * @param  Fluent  $column
+     * @return string
+     */
+    protected function typeText(Fluent $column)
+    {
+        return "string(MAX)";
+    }
+
+    /**
      * Create the column definition for a float type.
      *
      * @param  Fluent  $column

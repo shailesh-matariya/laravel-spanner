@@ -3,7 +3,7 @@
 namespace Colopl\Spanner\Migrations;
 
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 
 class DatabaseMigrationRepository implements MigrationRepositoryInterface
 {
@@ -104,7 +104,7 @@ class DatabaseMigrationRepository implements MigrationRepositoryInterface
      */
     public function log($file, $batch)
     {
-        $record = ['id' => Uuid::uuid4()->toString(), 'migration' => $file, 'batch' => $batch];
+        $record = ['id' => Str::orderedUuid()->toString(), 'migration' => $file, 'batch' => $batch];
 
         $this->table()->insert($record);
     }
